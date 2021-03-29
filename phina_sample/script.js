@@ -22,10 +22,12 @@ phina.define("MainScene", {
     this.backgroundColor = '#444';
 
     // ラベルを生成
-    var label = Label('Hello, phina.js!').addChildTo(this);
-    label.x = this.gridX.center(); // x 軸
-    label.y = this.gridY.center(); // y 軸
-    label.fill = '#eee';  // 塗りつぶし色
+    var label = Label({
+      text: 'Hello, phina.js!',
+      x: this.gridX.center(),
+      y: this.gridY.center(),
+      fill: '#eee',
+    }).addChildTo(this);
 
     var rect = Shape({
       x: 200,
