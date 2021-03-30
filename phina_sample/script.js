@@ -36,9 +36,7 @@ phina.define("MainScene", {
       height: 100,
     }).addChildTo(this);
 
-    rect.tweener.rotateTo(-10, 500).play();
-    rect.tweener.rotateTo(-13, 300).play();
-    rect.tweener.rotateTo(-15, 200).play();
+    rect.tweener.rotateTo(-15, 500, "easeOutCubic").play();
   },
 });
 
