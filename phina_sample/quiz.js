@@ -2,12 +2,21 @@
  * Runstant
  * 思いたったらすぐ開発. プログラミングに革命を...
  */
-
+ 
 // https://qiita.com/alkn203/items/70c09abc21c60bf75899
 // を参考にしたクイズゲームを作る予定
 
 // グローバルに展開
 phina.globalize();
+
+// 問題
+var question = {
+    "no": 1,
+    "qstr": "1はどっち?",
+    "sel": [1, 2],
+    "ans": 1,
+};
+
 
 // 定数
 var SCREEN_WIDTH = 800
@@ -34,13 +43,16 @@ phina.define("MainScene", {
     // 背景色
     this.backgroundColor = '#444';
     // グリッド
-    // 位置決め補助のためのグリッドを生成する。
-    // グリッドはコンテナではなく、座標計算のためのユーティリティとして用いる。
-    // Grid(width, columns, loop, offset)
-    // Grid.span(index): returns `unitWitdh * index + offset`
-    // Grid.center(offset) returns `(width/2) + (unitWidth*offset)`
-    // Grid.unit() returns `unitWidth`
     var grid = Grid(SCREEN_WIDTH, PIECE_NUM_X);
+    
+    // ラベルを生成
+    var label = Label({
+        text: question["qstr"],
+        fontSize: 60,
+        fill: '#eee',
+        }).addChildTo(this);
+    label.setPosition(this.gridX.center(), 80);
+    
     // ピースグループ
     var pieceGroup = DisplayElement().addChildTo(this);
     pieceGroup.y = 200;
@@ -53,38 +65,40 @@ phina.define("MainScene", {
             var piece = Piece(num).addChildTo(pieceGroup);
             piece.x = grid.span(spanX) + PIECE_OFFSET;
             piece.y = grid.span(spanY) + PIECE_OFFSET;
-
+            
             // タッチ有効
             piece.setInteractive(true);
             // タッチ時の処理
             piece.onpointend = function() {
+                if (question["ans"] == this.num) {
+                    label.text = "正解！"
+                } else {
+                    label.text = "あれれ～?"
+                }
                 console.log(this.num);
             };
         });
     });
+    
+    var button = Button({
+        x: this.gridX.center(),
+        y: 500,
+        text: "リセット",
+    }).addChildTo(this);
+    
+    button.onpointend = function() {
+        label.text = question["qstr"]
+    }
 
-    // ラベルを生成
-    var label = Label({
-        x: 80,
-        y: 80,
-        text: '問題',
-        fontSize: 60,
-        fill: '#eee',
-        }).addChildTo(this);
 
-    var rand = Random()
-    console.log(rand.randint(0, 100))
-    console.log(rand.randint(0, 100))
-    console.log(rand.randint(0, 100))
-    console.log(rand.randarray(10, 1, 10))
-
+    
     // var rect = Shape({
     //   x: 200,
     //   y: 200,
     //   width: 100,
     //   height: 100,
     // }).addChildTo(this);
-
+    
     // rect.tweener.rotateTo(-45, 1000, "swing").play();
     // rect.tweener.rotateTo(-15, 1000, "easeOutCubic").play();
     // rect.tweener.rotateTo(-15, 1000, "easeOutQuart").play();
