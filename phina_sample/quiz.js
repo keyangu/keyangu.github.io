@@ -1,11 +1,3 @@
-/*
- * Runstant
- * 思いたったらすぐ開発. プログラミングに革命を...
- */
- 
-// https://qiita.com/alkn203/items/70c09abc21c60bf75899
-// を参考にしたクイズゲームを作る予定
-
 // グローバルに展開
 phina.globalize();
 
@@ -16,7 +8,6 @@ var question = {
     "sel": [1, 2],
     "ans": 1,
 };
-
 
 // 定数
 var SCREEN_WIDTH = 800
@@ -29,13 +20,29 @@ var GRID_SIZE = 200;
 var PIECE_SIZE = GRID_SIZE * 0.95;
 var PIECE_OFFSET = GRID_SIZE / 2;
 
+var ASSETS = {
+   image: {
+    //  'bg': './images/bg.jpg',
+//     'Player': './images/ETNR_TOMITA_01.png',
+//     'again': './images/A_48.png',
+//     'block': './images/Box_06.png',
+//     'goal': './images/Goal_00.png',
+//     'wall_0': './images/Block_05.png',
+//     'wall_1': './images/Block_04.png',
+        'correct': './images/correct.png',
+    },
+    sound: {
+        'correct': './sound/crrect_answer3.mp3',
+        'blip': './sound/blip01.mp3',
+    },
+};
+
 /*
  * メインシーン
  */
 phina.define("MainScene", {
   // 継承
   superClass: 'DisplayScene',
-
   // 初期化
   init: function() {
     // super init
@@ -71,8 +78,10 @@ phina.define("MainScene", {
             // タッチ時の処理
             piece.onpointend = function() {
                 if (question["ans"] == this.num) {
+                    SoundManager.play('correct');
                     label.text = "正解！"
                 } else {
+                    SoundManager.play('blip');
                     label.text = "あれれ～?"
                 }
                 console.log(this.num);
@@ -140,8 +149,10 @@ phina.main(function() {
     startLabel: 'main', // MainScene から開始
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    assets: ASSETS,
   });
 
+  // fps表示
   app.enableStats();
 
   // 実行
