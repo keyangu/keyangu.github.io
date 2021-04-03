@@ -1,10 +1,8 @@
-/*
- * Runstant
- * 思いたったらすぐ開発. プログラミングに革命を...
- */
-
 // グローバルに展開
 phina.globalize();
+
+var SCREEN_WIDTH = 800;
+var SCREEN_HEIGHT = 600;
 
 /*
  * メインシーン
@@ -36,7 +34,13 @@ phina.define("MainScene", {
       height: 100,
     }).addChildTo(this);
 
-    rect.tweener.rotateTo(-15, 500, "easeOutCubic").play();
+    rect.tweener.rotateTo(-15, 500, "easeOutCubic").play();    
+    // rect.tweener.rotateTo(-45, 1000, "swing").play();
+    // rect.tweener.rotateTo(-15, 1000, "easeOutCubic").play();
+    // rect.tweener.rotateTo(-15, 1000, "easeOutQuart").play();
+    // rect.tweener.rotateTo(-15, 1000, "easeOutQuint").play();
+    // rect.tweener.rotateTo(-15, 1000, "easeOutExpo").play();
+    // rect.tweener.rotateTo(-15, 1000, "easeOutBounce").play();
   },
 });
 
