@@ -59,14 +59,13 @@ var question = [{
 ];
 
 // 定数
-// var SCREEN_WIDTH = 800;
-// var SCREEN_HEIGHT = 600;
+var SCREEN_WIDTH = 640;
+var SCREEN_HEIGHT = 960;
 var PIECE_NUM_X = 2;
 var PIECE_NUM_Y = 1;
 var PIECE_GROUP_OFS_Y = 200;
-// var GRID_SIZE = SCREEN_WIDTH / PIECE_NUM_X;
-var GRID_SIZE = 200;
-var PIECE_SIZE = GRID_SIZE * 0.95;
+var GRID_SIZE = SCREEN_WIDTH / PIECE_NUM_X;
+var PIECE_SIZE = GRID_SIZE * 0.8;
 var PIECE_OFFSET = GRID_SIZE / 2;
 var qidx = 0;
 
@@ -76,9 +75,37 @@ var ASSETS = {
     },
     sound: {
         'correct': './sound/crrect_answer3.mp3',
-        'blip': './sound/blip01.mp3',
+        'blip': './sound/blip4.mp3',
+        'kansei': './sound/kansei.mp3',
     },
 };
+
+phina.define("TitleScene", {
+    superClass: 'DisplayScene',
+    init : function(option) {
+        this.superInit(option);
+        var bg = Shape({
+            fill: '#444',
+            x: 320,
+            y: 480,
+            width: 640,
+            height: 960,
+        }).addChildTo(this);
+        var label = Label({
+            x: 320,
+            y: 480,
+            text: "やったね！！！",
+            fontSize: 60,
+            fill: '#eee',
+        }).addChildTo(this);
+
+        SoundManager.play('kansei');
+
+        this.on('pointend', function() {
+            this.exit();
+        })
+    },
+});
 
 /*
  * メインシーン
@@ -88,9 +115,11 @@ phina.define("MainScene", {
   superClass: 'DisplayScene',
   // 初期化
   init: function() {
+    var self = this;
     var elapsedMS = 0;
     var resultDispSta = 0;
     var fresultDisp = false;
+    qidx = 0;
     // super init
     this.superInit();
     // 背景色
@@ -115,14 +144,19 @@ phina.define("MainScene", {
 
     // 問題作成関数
     var createQuestion = function(qi) {
+        // 正解エフェクトの初期化
         correct.setSize(1200, 1200);
         correct.alpha = 0;
+
+        // 問題文テキストをセット
         qtext.text = question[qi]["qstr"];
 
         // ピースグループの再生成
-        pieceGroup.children.forEach(function(v) {
-            v.remove();
-        });
+        pieceGroup.children = [];
+        // pieceGroup.children.forEach(function(v) {
+        //     v.remove();
+        // });
+        // pieceGroup.remove();
         // pieceGroup = DisplayElement({y: 200}).addChildTo(this);
         // ピース配置
         question[qidx]["sel"].forEach(function(value, index) {
@@ -132,8 +166,8 @@ phina.define("MainScene", {
             var piece = Piece(num).addChildTo(pieceGroup);
             piece.x = grid.span(index) + PIECE_OFFSET;
             piece.y = grid.span(0) + PIECE_OFFSET;
-            console.log(piece.x);
-            console.log(grid.span(index));
+            console.log("piece.x: " + piece.x);
+            console.log("grid.span: " + grid.span(index));
             
             // タッチ有効
             piece.setInteractive(true);
@@ -183,9 +217,11 @@ phina.define("MainScene", {
             if (fcorrect) {
                 qidx++;
                 if (qidx >= question.length) {
-                    this.exit();
+                    self.nextLabel = "title";
+                    self.exit();
+                } else {
+                    createQuestion(qidx);
                 }
-                createQuestion(qidx);
             } else {
                 qtext.text = question[qidx]["qstr"];
             }
@@ -240,7 +276,7 @@ phina.define('Piece', {
 phina.main(function() {
   // アプリケーションを生成
   var app = GameApp({
-    startLabel: 'main', // MainScene から開始
+    startLabel: 'main',
     assets: ASSETS,
   });
   // fps表示
