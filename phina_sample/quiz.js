@@ -423,7 +423,7 @@ phina.main(function() {
   var app = GameApp({
     startLabel: 'main',
     // 画面をフィットさせない
-    fit: false,
+    // fit: false,
     assets: ASSETS,
   });
   // fps表示
