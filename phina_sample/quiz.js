@@ -276,22 +276,22 @@ phina.define("MainScene", {
             // XXX 選択肢分のループを回すが、現状はGridが2つ分しか
             // 対応していないため、実質2択
             quiz[qidx]["sel"].forEach(function(value, index) {
+                var piece;
                 // 問題の種別に応じて選択肢の形状を変える
                 // XXX ファクトリメソッドでも用意すると良い
                 if (quiz[qidx]["type"] == 'number') {
                     // 番号
                     var num = value;
                     // ピース作成
-                    var piece = Piece(num).addChildTo(pieceGroup);
+                    piece = Piece(num).addChildTo(pieceGroup);
                 } else if (quiz[qidx]["type"] == 'color') {
-                    var piece = CircleShape({
+                    piece = CircleShape({
                         radius: PIECE_SIZE / 2,
                         fill: quiz[qidx]["sel"][index],
                     }).addChildTo(pieceGroup);
                     piece.setInteractive(true);
                     piece.onpointend = touchEvent;
                 } else if (quiz[qidx]["type"] == 'shape') {
-                    var piece;
                     if (quiz[qidx]['sel'][index] == "phina.display.CircleShape") {
                         piece = CircleShape({
                             radius: PIECE_SIZE / 2,
@@ -422,6 +422,8 @@ phina.main(function() {
   // アプリケーションを生成
   var app = GameApp({
     startLabel: 'main',
+    // 画面をフィットさせない
+    fit: false,
     assets: ASSETS,
   });
   // fps表示
